@@ -11,7 +11,7 @@
 * Access to Dockerhub account credentials. 
 
 
-##APPLICATION CI/CD FLOW
+## APPLICATION CI/CD FLOW
 1. The application was built using html,css,js.
 2. A `DockerFile` was created and added in the root of the project. 
 3. This `DockerFile` defines the following steps:
@@ -39,8 +39,8 @@ any change is made to the repository.
    8. Run the new container on the EC2 instance.
 9. By so doing, we have ensured automatic deployment (CI/CD) on our project.
 
-##How Do I run this on project my local machine?
-###Prerequisite
+## How Do I run this project my local machine?
+### Prerequisite
 * Have Docker installed on your system 
 * Have Docker Compose installed on your system
 
