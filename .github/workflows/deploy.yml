@@ -24,6 +24,11 @@ jobs:
     needs: build
 
     steps:
+      - name: Debugging - List Contents of Source Directory
+        run: |
+          ls -al
+          ls -al techo-site-image.tar
+
       - name: Copy Docker Image to EC2 Instance
         uses: appleboy/scp-action@master
         with:
