@@ -13,10 +13,23 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Print Current Working Directory and List Contents (before build)
+        run: |
+          pwd
+          ls -al
+
       - name: Build Docker Image
         run: |
+          pwd
+          ls -al
           docker build -t techo-site-image .
-          docker save -o ./techo-site-image.tar techo-site-image
+          mkdir -p build
+          docker save -o build/techo-site-image.tar techo-site-image
+
+      - name: Print Current Working Directory and List Contents (after build)
+        run: |
+          pwd
+          ls -al
 
   transfer:
     runs-on: ubuntu-latest
@@ -26,8 +39,9 @@ jobs:
     steps:
       - name: Debugging - List Contents of Source Directory
         run: |
+          pwd
           ls -al
-          ls -al ./techo-site-image.tar
+          ls -al build/techo-site-image.tar
 
       - name: Copy Docker Image to EC2 Instance
         uses: appleboy/scp-action@master
@@ -35,7 +49,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./techo-site-image.tar"
+          source: "./build/techo-site-image.tar"
           target: "/home/ec2-user"
 
       - name: SSH into EC2 Instance and Load Docker Image
@@ -45,5 +59,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            pwd
+            ls -al
             docker load -i /home/ec2-user/techo-site-image.tar
             docker run -d -p 8080:80 techo-site-image
